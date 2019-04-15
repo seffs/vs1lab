@@ -24,15 +24,28 @@
 
 			<section class="tagging">
 				<h2>Tagging</h2>
+<<<<<<< HEAD
+=======
+
+>>>>>>> f360f4c9c02f96c0647d7693fe8f6ba04189738a
 				<!-- ############### Aufgabe1a Form1 Start -->
 				<form id="tag-form" action="/tagging" method="post">
 					<fieldset id="f1">
-						<legend> Enter new GeoTag </legend>
-							<label>Latitude: 	<input id="tag-latitude" name="lat" placeholder="Enter latitude" type="text" /></label>
-							<label>Longitude:	<input id="tag-longitude" name="lon" placeholder="Enter longitude" type="text" /></label>
-							<label>Name: 			<input id="tag-name" name="name" placeholder="Enter your name" type="text" /></label>
-							<label>Hashtag: 	<input name="hash" placeholder="Hastag?" type="text" /></label>
-							<button type="submit" form="tag-form" value="Submit">Submit</button>
+						<legend>Enter new GeoTag</legend>
+
+						<label for="taglati">Latitude:</label>
+						<input type="number" name="latitude" id="taglati" placeholder="49.013790" step="0.000005" required>
+
+						<label for="taglongi">Longitude:</label>
+						<input type="number" name="longitude" id="taglongi" placeholder="8.404435" step="0.000005" required>
+
+						<label for="tagname">Name:</label>
+						<input type="text" name="name" id="tagname" placeholder="Some Name" maxlength="10" required>
+
+						<label for="taghash">Hashtag:</label>
+						<input type="text" name="hashtag" id="taghash" placeholder="'#' + max. 10 letters" maxlength="11" pattern="#[A-Za-z]{3,}">
+
+						<button type="submit" id=tagsubmit>submit</button>
 					</fieldset>
 				</form>
 				<!-- ############### Aufgabe1a Form1 Ende -->
@@ -46,10 +59,12 @@
 				<form id="filter-form" action="/discovery" method="post">
 					<fieldset id="f2">
 						<legend>Filter by Searchterm</legend>
-							<label><input id="search-place" name="searchplace" placeholder="search term" type="text" />
-							<button type="submit" form="filter-form" value="Submit">Apply</button>
-							<button type="submit" form="filter-form" value="Submit">Remove</button>
-						</label>
+
+						<input type="text" name="searchterm" id="discterm" placeholder="search term">
+
+						<button type="submit" id=discoveryapply>Apply</button>
+
+						<button type="submit" id=discoveryremove>Remove</button>
 					</fieldset>
 				</form>
 				<!-- ############### Aufgabe1a Form2 Ende -->
