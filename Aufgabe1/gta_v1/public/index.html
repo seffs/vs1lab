@@ -28,19 +28,21 @@
 				<!-- ############### Aufgabe1a Form1 Start -->
 				<form id="tag-form" action="/tagging" method="post">
 					<fieldset>
-					<legend>Enter new GeoTag</legend>
-					<label for="taglati">Latitude:</label>
-					<input type="number" name="latitude" id="taglati" placeholder="49.013790"
-					step="0.000005" required>
-					<label for="taglongi">Longitude:</label>
-					<input type="number" name="longitude" id="taglongi" placeholder="8.404435"
-					step="0.000005" required>
-					<label for="tagname">Name:</label>
-					<input type="text" name="name" id="tagname" placeholder="Some Name" maxlength="10" required>
-					<label for="taghash">Hashtag:</label>
-					<input type="text" name="hashtag" id="taghash" placeholder="'#' + max. 10 letters"
-					maxlength="11" pattern="#[A-Za-z]{3,}">
-					<button type="submit">submit</button>
+						<legend>Enter new GeoTag</legend>
+
+						<label for="taglati">Latitude:</label>
+						<input type="number" name="latitude" id="taglati" placeholder="49.013790" step="0.000005" required>
+
+						<label for="taglongi">Longitude:</label>
+						<input type="number" name="longitude" id="taglongi" placeholder="8.404435" step="0.000005" required>
+
+						<label for="tagname">Name:</label>
+						<input type="text" name="name" id="tagname" placeholder="Some Name" maxlength="10" required>
+
+						<label for="taghash">Hashtag:</label>
+						<input type="text" name="hashtag" id="taghash" placeholder="'#' + max. 10 letters" maxlength="11" pattern="#[A-Za-z]{3,}">
+
+						<button type="submit" id=tagsubmit>submit</button>
 					</fieldset>
 				</form>
 				<!-- ############### Aufgabe1a Form1 Ende -->
@@ -53,10 +55,13 @@
 				<!-- ############### Aufgabe1a Form2 Start -->
 				<form id="filter-form" action="/discovery" method="post">
 					<fieldset>
-					<legend>Filter by Searchterm</legend>
-					<input type="text" name="searchterm" id="discterm" placeholder="search term">
-					<button type="submit">Apply</button>
-					<button type="submit">Remove</button>
+						<legend>Filter by Searchterm</legend>
+
+						<input type="text" name="searchterm" id="discterm" placeholder="search term">
+
+						<button type="submit" id=discoveryapply>Apply</button>
+
+						<button type="submit" id=discoveryremove>Remove</button>
 					</fieldset>
 				</form>
 				<!-- ############### Aufgabe1a Form2 Ende -->
