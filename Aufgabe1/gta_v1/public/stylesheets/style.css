@@ -2,7 +2,18 @@ body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
-
+label, input {
+    	display: block;
+			}
+			label {
+    	margin-bottom: 20px;
+			}
+			legend {
+				margin-bottom: 5px;
+			}
+			#f1 {
+				width: 50px; margin: left;
+			}
 a {
   color: #00B7FF;
 }
