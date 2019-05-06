@@ -6,13 +6,15 @@ header {
   width: auto; margin: left;
   clear: both;
 }
-.main {
-  padding: 100px;
+a {
+  color: #00B7FF;
+}
+body {
+  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  width: 50px;
 }
 label, input {
-  display: inline-block;
+  display: block;
 }
 label {
   margin-bottom: 20px;
