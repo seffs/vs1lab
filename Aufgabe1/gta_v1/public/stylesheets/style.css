@@ -15,35 +15,29 @@
 .col-11 {width: 91.66%;}
 .col-12 {width: 100%;}
 
-[class*="col-"] {
-  border: 1px solid red;
-}
+
 
 .row {
   display: flex;
 }
 
-.row::after {
-  content: "";
-  clear: both;
-  display: table;
-}
-
 body {
-  padding: 50px;
+  padding: 20px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 label, input {
     	display: block;
 			}
 			label {
-    	margin-bottom: 20px;
+        margin-top: 10px;
+        margin-bottom: 7px;
 			}
 			legend {
 				margin-bottom: 5px;
 			}
 			#f1 {
-				width: 50px; margin: left;
+				width: 90%;
+        margin: left;
 			}
 a {
   color: #00B7FF;
@@ -57,11 +51,50 @@ header {
 
 main {
   display: flex;
-  flex-direction: row;
+  margin: 15px;
 }
 
 footer {
   background-color: grey;
   color: white;
   padding: 15px;
+}
+
+input {
+  width: 150px;
+  height: 35px;
+}
+
+
+
+.discovery {
+  width: 98%;
+}
+
+button {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.discovery button {
+  margin-left: 10px;
+}
+
+.taglist li {
+  background-color: orange;
+  color: white;
+  list-style-type: none;
+  padding: 10px;
+  margin-bottom: 5px;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+ul {
+  padding: 0px;
+  margin: 0px;
+}
+
+#filter-form {
+  padding-bottom: 10px;
 }
