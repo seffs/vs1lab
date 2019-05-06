@@ -1,39 +1,143 @@
-* {
+*
+{
   box-sizing: border-box;
 }
-header {
-  background-color: grey;
-  width: auto; margin: left;
-  clear: both;
-}
-a {
-  color: #00B7FF;
-}
-body {
+body
+{
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
-label, input {
-  display: block;
-}
-label {
-  margin-bottom: 20px;
-}
-legend {
-  margin-bottom: 5px;
-}
-#f1 {
-  width: 50px; margin: left;
-}
-.tagging {
-  width: 25%;
+
+.col-1 {width: 8.33%;}
+.col-2 {width: 16.66%;}
+.tagging {width: 25%;}
+.taglist {width: 33.33%;}
+.col-5 {width: 41.66%;}
+.col-6 {width: 50%;}
+.col-7 {width: 58.33%;}
+.col-8 {width: 66.66%;}
+.discovery {width: 75%;}
+.tagmap {width: 66.66%;}
+.col-10 {width: 83.33%;}
+.col-11 {width: 91.66%;}
+.discovery-header {width: 100%;}
+[class*="col-"] {
   float: left;
+  padding: 1%;
 }
-.discovery {
-  width: 75%;
-  float: left;
+
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
 }
-footer {
-  clear:both;
+
+
+header
+{
+  clear: both;
   background-color: grey;
+  padding: 1%;
+  color: white;
+}
+a
+{
+  color: #00B7FF;
+}
+
+.tagging
+{
+  float: left;
+  padding: 1%;
+
+  /*/*border: 1px solid red;*/*/
+}
+  #f1
+  {
+    width: 98%;
+    margin: left;
+  }
+  #f1 input
+  {
+    margin-bottom: 10px;
+    padding: 1.5%;
+  }
+  #f1 button
+  {
+    margin-top: 2px;
+    margin-bottom: 2px;
+    display: block;
+  }
+  #f1 label
+  {
+    display: block;
+    margin-bottom: 5px;
+  }
+  #f1 legend
+  {
+    margin-bottom: 5px;
+  }
+
+.discovery
+{
+  float: left;
+  padding: 1%;
+  /*border: 1px solid red;*/
+}
+  #f2
+  {
+    padding-top: 1%;
+    padding-bottom: 1.5%;
+  }
+  #f2 input
+  {
+    display: inline-block;
+    padding: 0.5%;
+  }
+
+.discovery-header
+{
+  float: left;
+  /*border: 1px solid red;*/
+}
+.taglist
+{
+  float: left;
+  /*border: 1px solid red;*/
+  font-weight: bold;
+
+}
+.taglist li
+{
+  float: left;
+  padding: 2.5%;
+  width: 100%;
+  margin-left: -25px;
+  margin-bottom: 10px;
+  color: white;
+  background-color: DeepSkyBlue;
+  /*border: 1px solid red;*/
+}
+.tagmap
+{
+  float: left;
+  padding: 1.5%;
+  padding-left: 0%;
+  /*border: 1px solid red;*/
+}
+  #result-img
+  {
+  width: 98%;
+  height: 350px;
+  object-fit: fill;
+  }
+
+
+footer
+{
+  font-weight: bold;
+  clear: both;
+  background-color: grey;
+  color: white;
+  padding: 1%;
 }
