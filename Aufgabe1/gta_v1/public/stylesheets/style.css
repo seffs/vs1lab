@@ -1,12 +1,21 @@
-body {
-  padding: 50px;
+* {
+  box-sizing: border-box;
+}
+header {
+  background-color: grey;
+  width: auto; margin: left;
+  clear: both;
+}
+.main {
+  padding: 100px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  width: 50px;
 }
 label, input {
-display: block;
+  display: inline-block;
 }
 label {
-margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 legend {
   margin-bottom: 5px;
@@ -14,6 +23,15 @@ legend {
 #f1 {
   width: 50px; margin: left;
 }
-a {
-  color: #00B7FF;
+.tagging {
+  width: 25%;
+  float: left;
+}
+.discovery {
+  width: 75%;
+  float: left;
+}
+footer {
+  clear:both;
+  background-color: grey;
 }
