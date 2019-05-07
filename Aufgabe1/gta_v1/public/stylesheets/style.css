@@ -132,6 +132,21 @@ a
   object-fit: fill;
   }
 
+@media (max-width: 50em) {
+  .Site {
+    padding: 20px;
+	}
+  .row {
+    display: grid;
+		grid-template-columns:  repeat(1, 1fr);
+    width: 135%;
+	}
+  .tagging {
+    padding: 1px;
+    margin-left: 25%;
+  }
+}
+
 
 footer
 {
