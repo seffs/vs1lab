@@ -145,3 +145,35 @@ footer {
   color: white;
   padding: 1%;
 }
+
+/* Special rules for small displays */
+@media (max-width: 850px) {
+
+  * {
+    flex-direction: column;
+  }
+
+  .col-3, .col-4, .col-8, .col-9, #f1, .discovery, .discovery input, .tagging input{
+    width: 100%;
+  }
+
+  body {
+    padding: 0%;
+  }
+
+  h2{
+    margin-top: 9%;
+  }
+
+  button, .discovery button {
+    width: 100%;
+    height: 20px;
+    margin-left: 0%;
+  }
+
+  .taglist li {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+
+}
