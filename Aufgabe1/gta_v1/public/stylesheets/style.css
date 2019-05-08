@@ -148,12 +148,11 @@ footer {
 
 /* Special rules for small displays */
 @media (max-width: 850px) {
-
   * {
     flex-direction: column;
   }
 
-  .col-3, .col-4, .col-8, .col-9, #f1, .discovery, .discovery input, .tagging input{
+  .col-3, .col-4, .col-8, .col-9, #f1, .discovery, .discovery input, .tagging input {
     width: 100%;
   }
 
@@ -161,7 +160,7 @@ footer {
     padding: 0%;
   }
 
-  h2{
+  h2 {
     margin-top: 9%;
   }
 
@@ -175,5 +174,4 @@ footer {
     margin-left: 0px;
     margin-right: 0px;
   }
-
 }
