@@ -16,8 +16,8 @@ body
 .col-6 {width: 50%;}
 .col-7 {width: 58.33%;}
 .col-8 {width: 66.66%;}
-.discovery {width: 75%;}
 .tagmap {width: 66.66%;}
+.discovery {width: 75%;}
 .col-10 {width: 83.33%;}
 .col-11 {width: 91.66%;}
 .discovery-header {width: 100%;}
@@ -26,6 +26,10 @@ body
   padding: 1%;
 }
 
+.row {
+    display: flex;
+    flex-direction: row;
+}
 .row::after {
   content: "";
   clear: both;
@@ -49,8 +53,6 @@ a
 {
   float: left;
   padding: 1%;
-
-  /*/*border: 1px solid red;*/*/
 }
   #f1
   {
@@ -95,6 +97,7 @@ a
     padding: 0.5%;
   }
 
+
 .discovery-header
 {
   float: left;
@@ -102,21 +105,27 @@ a
 }
 .taglist
 {
+  display: flex;
   float: left;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: space-between;
   /*border: 1px solid red;*/
   font-weight: bold;
-
+  overflow: hidden;
 }
 .taglist li
 {
-  float: left;
+  display: flex;
+  overflow: hidden;
   padding: 2.5%;
-  width: 100%;
   margin-left: -25px;
   margin-bottom: 10px;
+  float: left;
+  width: 100%;
   color: white;
   background-color: DeepSkyBlue;
-  /*border: 1px solid red;*/
+  /*/*border: 1px solid red;*/*/
 }
 .tagmap
 {
@@ -132,22 +141,6 @@ a
   object-fit: fill;
   }
 
-@media (max-width: 50em) {
-  .Site {
-    padding: 20px;
-	}
-  .row {
-    display: grid;
-		grid-template-columns:  repeat(1, 1fr);
-    width: 135%;
-	}
-  .tagging {
-    padding: 1px;
-    margin-left: 25%;
-  }
-}
-
-
 footer
 {
   font-weight: bold;
@@ -155,4 +148,51 @@ footer
   background-color: grey;
   color: white;
   padding: 1%;
+}
+
+@media (max-width: 850px) {
+  .Site {
+    display: flex;
+    padding: 20px;
+    flex-direction: column;
+    flex-grow: 1;
+
+	}
+  .row {
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+		/*grid-template-columns:  repeat(1, 1fr);
+    width: 135%;*/
+  }
+  .tagging {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+  }
+  .tagging h2 {
+    display: flex;
+    justify-content: space-between;
+    align-self: center;
+    width: 35%;
+  }
+  .tagging #tag-form {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    width: 35%;
+  }
+  .discovery {
+    width: 100%;
+  }
+  .taglist{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+  .taglist li {
+    width: 100%;
+    display: inline-table;
+  }
 }
