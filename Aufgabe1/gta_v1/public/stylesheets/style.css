@@ -28,14 +28,7 @@ body
 
 .row {
     display: flex;
-    flex-direction: row;
 }
-.row::after {
-  content: "";
-  clear: both;
-  display: table;
-}
-
 
 header
 {
@@ -97,7 +90,6 @@ a
     padding: 0.5%;
   }
 
-
 .discovery-header
 {
   float: left;
@@ -156,9 +148,9 @@ footer
     padding: 20px;
     flex-direction: column;
     flex-grow: 1;
-
 	}
   .row {
+    display: flex;
     justify-content: center;
     flex-direction: column;
     align-items: center;
@@ -175,7 +167,7 @@ footer
     display: flex;
     justify-content: space-between;
     align-self: center;
-    width: 35%;
+    width: 30%;
   }
   .tagging #tag-form {
     display: flex;
@@ -184,15 +176,47 @@ footer
     width: 35%;
   }
   .discovery {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     width: 100%;
+  }
+  .discovery-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+  }
+  #f2 div {
+  display: inline-block;
+  }
+  .discovery-header h2 {
+    display: flex;
+    justify-content: space-between;
   }
   .taglist{
     display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
   }
   .taglist li {
+    margin-right: 150px;
+  }
+  .tagmap {
     width: 100%;
-    display: inline-table;
+  }
+}
+@media (max-width: 380px) {
+  .discovery {
+    width: 100%;
+    min-width: 200px;
+  }
+  .discovery-header h2 {
+    display: flex;
+    justify-content: space-between;
+    align-self: center;
+  }
+  .discovery-header input{
+    width: 100%;
   }
 }
