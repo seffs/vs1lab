@@ -6,7 +6,7 @@
  * "console.log" schreibt auf die Konsole des Browsers
  * Das Konsolenfenster muss im Browser explizit geöffnet werden.
  */
-console.log("The script is going to start...");
+console.log("The script is going to start....");
 
 // Es folgen einige Deklarationen, die aber noch nicht ausgeführt werden ...
 
