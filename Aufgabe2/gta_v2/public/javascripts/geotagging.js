@@ -15,7 +15,7 @@ console.log("The script is going to start...");
 GEOLOCATIONAPI = {
     getCurrentPosition: function(onsuccess) {
         onsuccess({
-            "coords": {
+          "coords": {
                 "latitude": 49.013790,
                 "longitude": 8.390071,
                 "altitude": null,
@@ -25,7 +25,8 @@ GEOLOCATIONAPI = {
                 "speed": null
             },
             "timestamp": 1540282332239
-        });
+        }
+      );
     }
 };
 
@@ -82,7 +83,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
     };
 
     // Hier Google Maps API Key eintragen
-    var apiKey = "YOUR_API_KEY_HERE";
+    var apiKey = "ygubvV4Hk4Wh0MJAi2Jy0TuaaZwltd26";
 
     /**
      * Funktion erzeugt eine URL, die auf die Karte verweist.
@@ -113,6 +114,26 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
         return urlString;
     };
 
+    var showMsg = function(msg) {
+        alert(msg);
+    };
+
+    var fillInPos = function(position) {
+        var lati = getLatitude(position);
+        var longi = getLongitude(position);
+        document.getElementById("taglati").value = lati;
+        document.getElementById("discoverylati").value = lati;
+        document.getElementById("taglongi").value = longi;
+        document.getElementById("discoverylongi").value = longi;
+    };
+
+    var createMap = function(position) {
+      var lati = getLatitude(position);
+      var longi = getLongitude(position);
+      var map = getLocationMapSrc(lati, longi);
+      document.getElementById("result-img").src = map;
+    };
+
     return { // Start öffentlicher Teil des Moduls ...
 
         // Public Member
@@ -120,7 +141,8 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
         readme: "Dieses Objekt enthält 'öffentliche' Teile des Moduls.",
 
         updateLocation: function() {
-            // TODO Hier Inhalt der Funktion "update" ergänzen
+            tryLocate(fillInPos, showMsg);
+            tryLocate(createMap, showMsg);
         }
 
     }; // ... Ende öffentlicher Teil
@@ -132,6 +154,6 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
  * des Skripts.
  */
 $(function() {
-    alert("Please change the script 'geotagging.js'");
-    // TODO Hier den Aufruf für updateLocation einfügen
+    console.log("Started JS");
+    gtaLocator.updateLocation();
 });
