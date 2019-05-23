@@ -125,9 +125,10 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
         document.getElementById("discoverylati").value = lati;
         document.getElementById("taglongi").value = longi;
         document.getElementById("discoverylongi").value = longi;
+        updateMap(position);
     };
 
-    var createMap = function(position) {
+    var updateMap = function(position) {
       var lati = getLatitude(position);
       var longi = getLongitude(position);
       var map = getLocationMapSrc(lati, longi);
@@ -142,7 +143,6 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 
         updateLocation: function() {
             tryLocate(fillInPos, showMsg);
-            tryLocate(createMap, showMsg);
         }
 
     }; // ... Ende öffentlicher Teil
