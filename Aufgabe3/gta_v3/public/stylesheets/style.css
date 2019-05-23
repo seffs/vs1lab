@@ -1,0 +1,177 @@
+/* Grid layout rules */
+* {
+  box-sizing: border-box;
+}
+
+.col-1 {
+  width: 8.33%;
+}
+
+.col-2 {
+  width: 16.66%;
+}
+
+.col-3 {
+  width: 25%;
+}
+
+.col-4 {
+  width: 33.33%;
+}
+
+.col-5 {
+  width: 41.66%;
+}
+
+.col-6 {
+  width: 50%;
+}
+
+.col-7 {
+  width: 58.33%;
+}
+
+.col-8 {
+  width: 66.66%;
+}
+
+.col-9 {
+  width: 75%;
+}
+
+.col-10 {
+  width: 83.33%;
+}
+
+.col-11 {
+  width: 91.66%;
+}
+
+.col-12 {
+  width: 100%;
+}
+
+.row {
+  display: flex;
+}
+
+/* General rules */
+body {
+  padding: 1.5%;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+label, input {
+  display: block;
+}
+
+label {
+  margin-top: 4%;
+}
+
+button {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  height: 35px;
+}
+
+legend {
+  margin-bottom: 5px;
+}
+
+a {
+  color: orange;
+}
+
+/* Website element rules*/
+header {
+  background-color: grey;
+  color: white;
+  padding: 1.2%;
+}
+
+main {
+  display: flex;
+  margin: 1.2%;
+}
+
+/* Tagging Widget rules*/
+#f1 {
+  width: 90%;
+}
+
+.tagging input {
+  width: 75%;
+  height: 35px;
+}
+
+/* Discovery widget rules*/
+#filter-form {
+  padding-bottom: 1%;
+}
+
+.discovery {
+  width: 98%;
+}
+
+.discovery input {
+  width: 20%;
+  height: 35px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.discovery button {
+  margin-left: 1%;
+}
+
+ul {
+  padding: 0px;
+  margin: 0px;
+}
+
+.taglist li {
+  background-color: orange;
+  color: white;
+  list-style-type: none;
+  padding: 10px;
+  margin-bottom: 5px;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+footer {
+  background-color: grey;
+  color: white;
+  padding: 1%;
+}
+
+/* Special rules for small displays */
+@media (max-width: 850px) {
+  * {
+    flex-direction: column;
+  }
+
+  .col-3, .col-4, .col-8, .col-9, #f1, .discovery, .discovery input, .tagging input {
+    width: 100%;
+  }
+
+  body {
+    padding: 0%;
+  }
+
+  h2 {
+    margin-top: 9%;
+  }
+
+  button, .discovery button {
+    width: 100%;
+    height: 20px;
+    margin-left: 0%;
+  }
+
+  .taglist li {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+}
