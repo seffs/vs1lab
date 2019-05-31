@@ -120,11 +120,6 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 
     updateLocation: function() {
 
-      if (document.getElementById("taglati").value === "") {
-        console.log("Update Position...");
-        tryLocate(myPosition, errorMessage);
-      }
-
       function errorMessage(msg) {
         alert(msg);
       }
@@ -136,9 +131,24 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
         document.getElementById("discoverylati").value = latitude;
         document.getElementById("taglongi").value = longitude;
         document.getElementById("discoverylongi").value = longitude;
-        document.getElementById("result-img").src = getLocationMapSrc(latitude, longitude, [], 15);
+        updateMap();
       }
-    },
+
+      function updateMap() {
+        var lati = document.getElementById("taglati").value;
+        var longi = document.getElementById("taglongi").value;
+        var taglist = JSON.parse(document.getElementById("result-img").dataset.tags);
+        document.getElementById("result-img").src = getLocationMapSrc(lati, longi, taglist, 15);
+      }
+
+      if (document.getElementById("taglati").value === "") {
+        console.log("Update Position...");
+        tryLocate(myPosition, errorMessage);
+      } else {
+        updateMap();
+      }
+    }
+
 
   }; // ... Ende öffentlicher Teil
 })(GEOLOCATIONAPI);

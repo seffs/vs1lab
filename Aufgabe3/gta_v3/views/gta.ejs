@@ -76,14 +76,14 @@
 						<div class="taglist">
 							<ul id="results">
 								<% if (taglist !== undefined) taglist.forEach(function(gtag) { %>
-									<li><%= gtag.name %> ( <%= gtag.latitude %>,<%= gtag.longitude %>) <%= gtag.hashtag %> </li>
+								<li><%= gtag.name %> ( <%= gtag.latitude %>,<%= gtag.longitude %>) <%= gtag.hashtag %> </li>
 								<% }); %>
 							</ul>
 						</div>
 					</div>
 					<div class="col-8">
 						<div class="tagmap">
-							<img id="result-img" src="./images/mapview.jpg" alt="a map with locations" />
+							<img id="result-img" data-tags="<%= mapTags %>" src="./images/mapview.jpg" alt="a map with locations" />
 							<div class="caption">Result map</div>
 						</div>
 					</div>
@@ -99,9 +99,9 @@
 
 	<!-- Load JavaScripts
 	    ================================================== -->
-	    <!-- Placed at the end of the document so the pages load faster -->
-	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-	    <script src="./javascripts/geotagging.js"></script>
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+	<script src="./javascripts/geotagging.js"></script>
 </body>
 
 </html>
