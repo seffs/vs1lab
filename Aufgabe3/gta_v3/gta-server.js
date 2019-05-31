@@ -56,39 +56,50 @@ var gtag = function(name, lati, longi, hashtag) {
  */
 
 // TODO: CODE ERGÄNZEN
-var geoTagSpace = [];
+var geoTagManagement = (function() {
 
-var searchRad = function(lati, longi, radius) {
-  geoTagSpace.forEach(function(gtag) {
-    if (gtag.latitude <= (lati + radius) && gtag.latitude >= (lati - radius)) {
-      return gtag;
+  var geoTagSpace = [];
+
+  return {
+
+    getGeoTags: function() {
+      return geoTagSpace;
+    },
+
+    searchRad: function(lati, longi, radius) {
+      geoTagSpace.forEach(function(gtag) {
+        if (gtag.latitude <= (lati + radius) && gtag.latitude >= (lati - radius)) {
+          return gtag;
+        }
+        if (gtag.longitude <= (longi + radius) && gtag.longitude >= (longi - radius)) {
+          return gtag;
+        }
+      });
+    },
+
+    searchTerm: function(term) {
+      var ret = [];
+      geoTagSpace.forEach(function(gtag) {
+        if (gtag.name.indexOf(term) !== (-1)) {
+          ret.push(gtag);
+        } else if (gtag.hashtag.indexOf(term) !== (-1)) {
+          ret.push(gtag);
+        }
+      });
+      return ret;
+    },
+
+    addGeoTag: function(gtag) {
+      geoTagSpace.push(gtag);
+    },
+
+    delGeoTag: function(gtag) {
+      var i = geoTagSpace.indexOf(gtag);
+      geoTagSpace = geoTagSpace.splice(i, 1);
     }
-    if (gtag.longitude <= (longi + radius) && gtag.longitude >= (longi - radius)) {
-      return gtag;
-    }
-  });
-};
 
-var searchTerm = function(term) {
-  var ret = [];
-  geoTagSpace.forEach(function(gtag) {
-    if (gtag.name.indexOf(term) !== (-1)) {
-      ret.push(gtag);
-    } else if (gtag.hashtag.indexOf(term) !== (-1)) {
-      ret.push(gtag);
-    }
-  });
-  return ret;
-};
-
-var addGeoTag = function(gtag) {
-  geoTagSpace.push(gtag);
-};
-
-var delGeoTag = function(gtag) {
-  var i = geoTagSpace.indexOf(gtag);
-  geoTagSpace = geoTagSpace.splice(i, 1);
-};
+  };
+})();
 
 /**
  * Route mit Pfad '/' für HTTP 'GET' Requests.
@@ -100,13 +111,11 @@ var delGeoTag = function(gtag) {
  */
 
 app.get('/', function(req, res) {
-  console.log(req.body.latitude);
-  console.log(req.body.longitude);
   res.render('gta', {
     taglist: [],
     myLatitude: req.body.latitude,
     myLongitude: req.body.longitude,
-    mapTags: JSON.stringify(geoTagSpace)
+    mapTags: JSON.stringify(geoTagManagement.getGeoTags())
   });
 });
 
@@ -125,15 +134,13 @@ app.get('/', function(req, res) {
 
 // TODO: CODE ERGÄNZEN START
 app.post('/tagging', function(req, res) {
-  console.log(req.body.latitude);
-  console.log(req.body.longitude);
   var newGtag = new gtag(req.body.name, req.body.latitude, req.body.longitude, req.body.hashtag);
-  addGeoTag(newGtag);
+  geoTagManagement.addGeoTag(newGtag);
   res.render('gta', {
-    taglist: geoTagSpace,
+    taglist: geoTagManagement.getGeoTags(),
     myLatitude: req.body.latitude,
     myLongitude: req.body.longitude,
-    mapTags: JSON.stringify(geoTagSpace)
+    mapTags: JSON.stringify(geoTagManagement.getGeoTags())
   });
 });
 
@@ -151,11 +158,9 @@ app.post('/tagging', function(req, res) {
 
 // TODO: CODE ERGÄNZEN
 app.post('/discovery', function(req, res) {
-  console.log(req.body.latitude);
-  console.log(req.body.longitude);
-  var showGtags = geoTagSpace;
+  var showGtags = geoTagManagement.getGeoTags();
   if (req.body.searchterm !== "") {
-    showGtags = searchTerm(req.body.searchterm);
+    showGtags = geoTagManagement.searchTerm(req.body.searchterm);
   }
   res.render('gta', {
     taglist: showGtags,
