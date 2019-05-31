@@ -31,10 +31,10 @@
 						<legend>Enter new GeoTag</legend>
 
 						<label for="taglati">Latitude:</label>
-						<input type="text" name="latitude" id="taglati" placeholder="49.013790" required>
+						<input type="text" name="latitude" id="taglati" value="<%= myLatitude %>" placeholder="49.013790" required>
 
 						<label for="taglongi">Longitude:</label>
-						<input type="text" name="longitude" id="taglongi" placeholder="8.404435" required>
+						<input type="text" name="longitude" id="taglongi" value="<%= myLongitude %>" placeholder="8.404435" required>
 
 						<label for="tagname">Name:</label>
 						<input type="text" name="name" id="tagname" placeholder="Some Name" maxlength="10" required>
@@ -60,9 +60,9 @@
 						<div class="row">
 							<input type="text" name="searchterm" id="discterm" placeholder="Search term">
 
-							<input type="hidden" name="latitude" id="discoverylati" required>
+							<input type="hidden" name="latitude" id="discoverylati" value="<%= myLatitude %>" required>
 
-							<input type="hidden" name="longitude" id="discoverylongi" required>
+							<input type="hidden" name="longitude" id="discoverylongi" value="<%= myLongitude %>" required>
 
 							<button type="submit" id=discoveryapply>Apply</button>
 

@@ -100,8 +100,12 @@ var gtag = function(name, lati, longi, hashtag){
  */
 
 app.get('/', function(req, res) {
+    console.log(req.body.latitude);
+    console.log(req.body.longitude);
     res.render('gta', {
-        taglist: []
+        taglist: [],
+        myLatitude: req.body.latitude,
+        myLongitude: req.body.longitude
     });
 });
 
@@ -120,10 +124,14 @@ app.get('/', function(req, res) {
 
 // TODO: CODE ERGÄNZEN START
 app.post('/tagging', function(req, res){
+  console.log(req.body.latitude);
+  console.log(req.body.longitude);
   var newGtag = new gtag(req.body.name, req.body.latitude, req.body.longitude, req.body.hashtag);
   addGeoTag(newGtag);
   res.render('gta', {
-    taglist: geoTagSpace
+    taglist: geoTagSpace,
+    myLatitude: req.body.latitude,
+    myLongitude: req.body.longitude
   });
 });
 
@@ -141,12 +149,16 @@ app.post('/tagging', function(req, res){
 
 // TODO: CODE ERGÄNZEN
 app.post('/discovery', function(req, res){
+  console.log(req.body.latitude);
+  console.log(req.body.longitude);
   var showGtags = geoTagSpace;
   if (req.body.searchterm !== ""){
     showGtags = searchTerm(req.body.searchterm);
   }
   res.render('gta', {
-    taglist: showGtags
+    taglist: showGtags,
+    myLatitude: req.body.latitude,
+    myLongitude: req.body.longitude
   });
 });
 
