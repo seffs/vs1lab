@@ -66,15 +66,17 @@ var geoTagManagement = (function() {
       return geoTagSpace;
     },
 
-    searchRad: function(lati, longi, radius) {
-      geoTagSpace.forEach(function(gtag) {
-        if (gtag.latitude <= (lati + radius) && gtag.latitude >= (lati - radius)) {
-          return gtag;
+    searchRad: function(lati, longi, radius, geoTagList) {
+      var ret = [];
+      geoTagList.forEach(function(gtag) {
+        if (parseFloat(gtag.latitude) <= (parseFloat(lati) + radius) && parseFloat(gtag.latitude) >= (parseFloat(lati) - radius)) {
+          if (parseFloat(gtag.longitude) <= (parseFloat(longi) + radius) && parseFloat(gtag.longitude) >= (parseFloat(longi) - radius)) {
+            ret.push(gtag);
+          }
         }
-        if (gtag.longitude <= (longi + radius) && gtag.longitude >= (longi - radius)) {
-          return gtag;
-        }
-      });
+      }
+    );
+    return ret;
     },
 
     searchTerm: function(term) {
@@ -136,11 +138,13 @@ app.get('/', function(req, res) {
 app.post('/tagging', function(req, res) {
   var newGtag = new gtag(req.body.name, req.body.latitude, req.body.longitude, req.body.hashtag);
   geoTagManagement.addGeoTag(newGtag);
+  var showGtags = geoTagManagement.getGeoTags();
+  showGtags = geoTagManagement.searchRad(req.body.latitude, req.body.longitude, 10.0, showGtags);
   res.render('gta', {
-    taglist: geoTagManagement.getGeoTags(),
+    taglist: showGtags,
     myLatitude: req.body.latitude,
     myLongitude: req.body.longitude,
-    mapTags: JSON.stringify(geoTagManagement.getGeoTags())
+    mapTags: JSON.stringify(showGtags)
   });
 });
 
@@ -162,6 +166,7 @@ app.post('/discovery', function(req, res) {
   if (req.body.searchterm !== "") {
     showGtags = geoTagManagement.searchTerm(req.body.searchterm);
   }
+  showGtags = geoTagManagement.searchRad(req.body.latitude, req.body.longitude, 10.0, showGtags);
   res.render('gta', {
     taglist: showGtags,
     myLatitude: req.body.latitude,
