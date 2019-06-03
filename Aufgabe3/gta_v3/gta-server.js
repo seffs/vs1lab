@@ -13,12 +13,13 @@ var http = require('http');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var express = require('express');
+//var gtagManage = require("./gtag_manage");
 
 var app;
 app = express();
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({
-    extended: false
+  extended: false
 }));
 
 // Setze ejs als View Engine
@@ -30,6 +31,7 @@ app.set('view engine', 'ejs');
  */
 
 // TODO: CODE ERGÄNZEN
+app.use(express.static(__dirname + "/public"));
 
 /**
  * Konstruktor für GeoTag Objekte.
@@ -37,6 +39,12 @@ app.set('view engine', 'ejs');
  */
 
 // TODO: CODE ERGÄNZEN
+var gtag = function(name, lati, longi, hashtag) {
+  this.name = name;
+  this.latitude = lati;
+  this.longitude = longi;
+  this.hashtag = hashtag;
+};
 
 /**
  * Modul für 'In-Memory'-Speicherung von GeoTags mit folgenden Komponenten:
@@ -48,6 +56,52 @@ app.set('view engine', 'ejs');
  */
 
 // TODO: CODE ERGÄNZEN
+var geoTagManagement = (function() {
+
+  var geoTagSpace = [];
+
+  return {
+
+    getGeoTags: function() {
+      return geoTagSpace;
+    },
+
+    searchRad: function(lati, longi, radius, geoTagList) {
+      var ret = [];
+      geoTagList.forEach(function(gtag) {
+        if (parseFloat(gtag.latitude) <= (parseFloat(lati) + radius) && parseFloat(gtag.latitude) >= (parseFloat(lati) - radius)) {
+          if (parseFloat(gtag.longitude) <= (parseFloat(longi) + radius) && parseFloat(gtag.longitude) >= (parseFloat(longi) - radius)) {
+            ret.push(gtag);
+          }
+        }
+      }
+    );
+    return ret;
+    },
+
+    searchTerm: function(term) {
+      var ret = [];
+      geoTagSpace.forEach(function(gtag) {
+        if (gtag.name.indexOf(term) !== (-1)) {
+          ret.push(gtag);
+        } else if (gtag.hashtag.indexOf(term) !== (-1)) {
+          ret.push(gtag);
+        }
+      });
+      return ret;
+    },
+
+    addGeoTag: function(gtag) {
+      geoTagSpace.push(gtag);
+    },
+
+    delGeoTag: function(gtag) {
+      var i = geoTagSpace.indexOf(gtag);
+      geoTagSpace = geoTagSpace.splice(i, 1);
+    }
+
+  };
+})();
 
 /**
  * Route mit Pfad '/' für HTTP 'GET' Requests.
@@ -59,9 +113,12 @@ app.set('view engine', 'ejs');
  */
 
 app.get('/', function(req, res) {
-    res.render('gta', {
-        taglist: []
-    });
+  res.render('gta', {
+    taglist: [],
+    myLatitude: req.body.latitude,
+    myLongitude: req.body.longitude,
+    mapTags: JSON.stringify(geoTagManagement.getGeoTags())
+  });
 });
 
 /**
@@ -78,6 +135,18 @@ app.get('/', function(req, res) {
  */
 
 // TODO: CODE ERGÄNZEN START
+app.post('/tagging', function(req, res) {
+  var newGtag = new gtag(req.body.name, req.body.latitude, req.body.longitude, req.body.hashtag);
+  geoTagManagement.addGeoTag(newGtag);
+  var showGtags = geoTagManagement.getGeoTags();
+  showGtags = geoTagManagement.searchRad(req.body.latitude, req.body.longitude, 10.0, showGtags);
+  res.render('gta', {
+    taglist: showGtags,
+    myLatitude: req.body.latitude,
+    myLongitude: req.body.longitude,
+    mapTags: JSON.stringify(showGtags)
+  });
+});
 
 /**
  * Route mit Pfad '/discovery' für HTTP 'POST' Requests.
@@ -92,6 +161,19 @@ app.get('/', function(req, res) {
  */
 
 // TODO: CODE ERGÄNZEN
+app.post('/discovery', function(req, res) {
+  var showGtags = geoTagManagement.getGeoTags();
+  if (req.body.searchterm !== "") {
+    showGtags = geoTagManagement.searchTerm(req.body.searchterm);
+  }
+  showGtags = geoTagManagement.searchRad(req.body.latitude, req.body.longitude, 10.0, showGtags);
+  res.render('gta', {
+    taglist: showGtags,
+    myLatitude: req.body.latitude,
+    myLongitude: req.body.longitude,
+    mapTags: JSON.stringify(showGtags)
+  });
+});
 
 /**
  * Setze Port und speichere in Express.
