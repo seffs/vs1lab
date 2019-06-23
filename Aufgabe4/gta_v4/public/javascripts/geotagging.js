@@ -137,7 +137,6 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
       function updateMap() {
         var lati = document.getElementById("taglati").value;
         var longi = document.getElementById("taglongi").value;
-        console.log(JSON.parse(document.getElementById("result-img").dataset.tags));
         var taglist = JSON.parse(document.getElementById("result-img").dataset.tags);
         document.getElementById("result-img").src = getLocationMapSrc(lati, longi, taglist, 15);
       }
@@ -154,6 +153,69 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
   }; // ... Ende öffentlicher Teil
 })(GEOLOCATIONAPI);
 
+var ajaxEvents = (function(){
+
+  var gtag = function(name, lati, longi, hashtag) {
+    this.name = name;
+    this.latitude = lati;
+    this.longitude = longi;
+    this.hashtag = hashtag;
+  };
+
+  return {
+
+    submitTag: function(){
+      var ajax = new XMLHttpRequest();
+      
+      ajax.onreadystatechange = function() {
+        if (ajax.readystate == 4){
+          gtaLocator.updateMap();
+          var tags = JSON.parse(document.getElementById("result-img").dataset.tags);
+          if (taglist !== undefined){
+            tags.forEach(function(gtag){
+              var newElement = document.createElement("li");
+              var content = document.createTextNode(gtag.name + " (" + gtag.latitude + ", " + gtag.longitude + ") " + gtag.hashtag);
+              newElement.appendChild(content);
+              var list = document.getElementById("results");
+              list.appendChild(newElement);
+            });
+          }
+        }
+      };
+
+      var newGtag = new gtag(document.getElementById("tagname"), document.getElementById("taglati"), document.getElementById("taglongi"), document.getElementById("taghash"));
+      var gtagJson = JSON.stringify(newGtag);
+      ajax.open("POST", "/tagging", true);
+      ajax.setRequestHeader("Content-type", "application/json;charset=UTF-8");
+      ajax.send(gtagJson);
+    },
+
+    discoverTags: function(){
+      var ajax = new XMLHttpRequest();
+
+      ajax.onreadystatechange = function() {
+        if (ajax.readystate == 4){
+          gtaLocator.updateMap();
+          var tags = JSON.parse(document.getElementById("result-img").dataset.tags);
+          if (taglist !== undefined){
+            tags.forEach(function(gtag){
+              var newElement = document.createElement("li");
+              var content = document.createTextNode(gtag.name + " (" + gtag.latitude + ", " + gtag.longitude + ") " + gtag.hashtag);
+              newElement.appendChild(content);
+              var list = document.getElementById("results");
+              list.appendChild(newElement);
+            });
+          }
+        }
+      };
+
+      var term = "searchterm=" document.getElementById("discterm");
+      ajax.open("GET", "/discovery?searchterm=" + term, true);
+      ajax.send();
+    }
+  }
+})();
+
 /**
  * $(function(){...}) wartet, bis die Seite komplett geladen wurde. Dann wird die
  * angegebene Funktion aufgerufen. An dieser Stelle beginnt die eigentliche Arbeit
@@ -161,4 +223,6 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
  */
 $(function() {
   gtaLocator.updateLocation();
+  document.getElementById("tagsubmit").addEventListener("click", ajaxEvents.submitTag());
+  document.getElementById("discoveryapply").addEventListener("click", ajaxEvents.discoverTags());
 });
