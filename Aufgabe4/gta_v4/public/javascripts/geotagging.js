@@ -147,6 +147,10 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
       } else {
         updateMap();
       }
+    },
+
+    getMap: function(lat, lon, tags, zoom) {
+      return getLocationMapSrc(lat, lon, tags, zoom);
     }
 
 
@@ -166,12 +170,14 @@ var ajaxEvents = (function(){
 
     submitTag: function(){
       var ajax = new XMLHttpRequest();
-      
+
+
       ajax.onreadystatechange = function() {
-        if (ajax.readystate == 4){
-          gtaLocator.updateMap();
-          var tags = JSON.parse(document.getElementById("result-img").dataset.tags);
-          if (taglist !== undefined){
+        if (ajax.readyState == 4){
+
+          var tags = JSON.parse(ajax.responseText);
+          document.getElementById("results").innerHTML = "";
+          if (tags !== []){
             tags.forEach(function(gtag){
               var newElement = document.createElement("li");
               var content = document.createTextNode(gtag.name + " (" + gtag.latitude + ", " + gtag.longitude + ") " + gtag.hashtag);
@@ -180,13 +186,19 @@ var ajaxEvents = (function(){
               list.appendChild(newElement);
             });
           }
+
+          var lati = document.getElementById("taglati").value;
+          var longi = document.getElementById("taglongi").value;
+          document.getElementById("result-img").src = gtaLocator.getMap(lati, longi, tags, 15);
         }
       };
 
-      var newGtag = new gtag(document.getElementById("tagname"), document.getElementById("taglati"), document.getElementById("taglongi"), document.getElementById("taghash"));
+      var newGtag = new gtag(document.getElementById("tagname").value, document.getElementById("taglati").value, document.getElementById("taglongi").value, document.getElementById("taghash").value);
+      console.log(newGtag);
       var gtagJson = JSON.stringify(newGtag);
-      ajax.open("POST", "/tagging", true);
-      ajax.setRequestHeader("Content-type", "application/json;charset=UTF-8");
+      console.log(gtagJson);
+      ajax.open("POST", "/geotags", true);
+      ajax.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
       ajax.send(gtagJson);
     },
 
@@ -194,10 +206,11 @@ var ajaxEvents = (function(){
       var ajax = new XMLHttpRequest();
 
       ajax.onreadystatechange = function() {
-        if (ajax.readystate == 4){
-          gtaLocator.updateMap();
-          var tags = JSON.parse(document.getElementById("result-img").dataset.tags);
-          if (taglist !== undefined){
+        if (ajax.readyState == 4){
+
+          var tags = JSON.parse(ajax.responseText);
+          document.getElementById("results").innerHTML = "";
+          if (tags !== []){
             tags.forEach(function(gtag){
               var newElement = document.createElement("li");
               var content = document.createTextNode(gtag.name + " (" + gtag.latitude + ", " + gtag.longitude + ") " + gtag.hashtag);
@@ -206,15 +219,28 @@ var ajaxEvents = (function(){
               list.appendChild(newElement);
             });
           }
+
+          var lati = document.getElementById("taglati").value;
+          var longi = document.getElementById("taglongi").value;
+          document.getElementById("result-img").src = gtaLocator.getMap(lati, longi, tags, 15);
         }
       };
 
-      var term = "searchterm=" document.getElementById("discterm");
-      ajax.open("GET", "/discovery?searchterm=" + term, true);
+      var myLat = "?latitude=" + document.getElementById("discoverylati").value;
+      var myLong = "&longitude=" + document.getElementById("discoverylongi").value;
+      var term = "&searchterm=" + document.getElementById("discterm").value;
+      ajax.open("GET", "/geotags" + myLat + myLong + term, true);
       ajax.send();
     }
   }
 })();
+
+document.getElementById("tagsubmit").addEventListener("click", function(){ajaxEvents.submitTag();});
+document.getElementById("discoveryapply").addEventListener("click", function(){ajaxEvents.discoverTags();});
+document.getElementById("discoveryremove").addEventListener("click", function(){
+  document.getElementById("discterm").value = "";
+  ajaxEvents.discoverTags();
+});
 
 /**
  * $(function(){...}) wartet, bis die Seite komplett geladen wurde. Dann wird die
@@ -223,6 +249,4 @@ var ajaxEvents = (function(){
  */
 $(function() {
   gtaLocator.updateLocation();
-  document.getElementById("tagsubmit").addEventListener("click", ajaxEvents.submitTag());
-  document.getElementById("discoveryapply").addEventListener("click", ajaxEvents.discoverTags());
 });

@@ -167,6 +167,7 @@ app.post('/discovery', function(req, res) {
     showGtags = geoTagManagement.searchTerm(req.body.searchterm);
   }
   showGtags = geoTagManagement.searchRad(req.body.latitude, req.body.longitude, 10.0, showGtags);
+  console.log(geoTagManagement.getGeoTags());
   res.render('gta', {
     taglist: showGtags,
     myLatitude: req.body.latitude,
