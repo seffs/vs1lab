@@ -13,14 +13,18 @@ var http = require('http');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 var express = require('express');
+var url = require('url');
 //var gtagManage = require("./gtag_manage");
 
 var app;
+var router;
 app = express();
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({
   extended: false
 }));
+app.use(bodyParser.json());
+app.use(express.json());
 
 // Setze ejs als View Engine
 app.set('view engine', 'ejs');
@@ -173,6 +177,64 @@ app.post('/discovery', function(req, res) {
     myLongitude: req.body.longitude,
     mapTags: JSON.stringify(showGtags)
   });
+});
+
+/**
+*AJAX-Aufrufe
+*/
+app.get('/geotags', function(req,res) {
+  res.json(geoTagManagement.getGeoTags());
+});
+
+app.get('/geotags/:name', function(req,res) {
+  var found = geoTagManagement.getGeoTags();
+  var foundtag = found.find(tag => tag.name === req.params.name);
+  res.json(foundtag);
+});
+
+app.put('/geotags/:name', function(req,res) {
+  var query = url.parse(req.url, true).query;
+  var found = geoTagManagement.getGeoTags();
+  var foundtag = found.find(tag => tag.name === req.params.name);
+  foundtag.name = query["name"] !== undefined ? query["name"] : foundtag.name;
+  foundtag.latitude = query["latitude"] !== undefined ? query["latitude"] : foundtag.latitude;
+  foundtag.longitude = query["longitude"] !== undefined ? query["longitude"] : foundtag.longitude;
+  foundtag.hashtag = query["hashtag"] !== undefined ? query["hashtag"] : foundtag.hashtag;
+  res.json(foundtag);
+});
+
+app.delete('/geotags/:name', function(req, res) {
+  var found = geoTagManagement.getGeoTags();
+  var foundtag = found.find(tag => tag.name === req.params.name);
+  var found = new gtag(foundtag.name,foundtag.latitude,foundtag.longitude,foundtag.hashtag);
+  geoTagManagement.delGeoTag(found);
+  delete found;
+  res.send();
+});
+
+app.get('/geotags*', function(req,res) {
+  var query = url.parse(req.url, true).query;
+  if (query["searchterm"] != "") {
+    showGtags = geoTagManagement.searchTerm(query["searchterm"]);
+  }
+  showGtags = geoTagManagement.searchRad(query["latitude"], query["longitude"], 10.0, showGtags);
+  res.json(showGtags);
+});
+
+
+app.post('/geotags', function(req,res) {
+  var newGtag = new gtag(req.body.name,req.body.latitude, req.body.longitude, req.body.hashtag);
+  geoTagManagement.addGeoTag(newGtag);
+  var showGtags = geoTagManagement.getGeoTags();
+  showGtags = geoTagManagement.searchRad(req.body.latitude, req.body.longitude, 10.0, showGtags);
+  var answer = {
+    taglist: newGtag,
+    mapTags: showGtags
+  }
+  var url = "/geotags/" + req.body.name;
+  res.location(url);
+  res.status(201);
+  res.json(answer);
 });
 
 /**

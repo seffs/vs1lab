@@ -118,6 +118,69 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
     // Public Member
     readme: "Dieses Objekt enthält 'öffentliche' Teile des Moduls.",
 
+    eventListener: function() {
+
+      var ajax = new XMLHttpRequest();
+
+      function taggingFormular() {
+        ajax.onreadystatechange = function () {
+          if (this.readyState == 4 && this.status == 201) {
+            console.log(ajax.responseText);
+            var obj = JSON.parse(ajax.responseText);
+            var original = document.getElementById("results").innerHTML;
+            document.getElementById("results").innerHTML = original + "<li> " + obj.taglist.name + " (" + obj.taglist.latitude + ", " + obj.taglist.longitude + ") " + obj.taglist.hashtag + "</li>";
+            document.getElementById("discoverylati").value = obj.taglist.latitude;
+            document.getElementById("discoverylongi").value = obj.taglist.longitude;
+            document.getElementById("result-img").dataset.tags = JSON.stringify(obj.mapTags);
+          }
+        }
+
+      var gtag = {
+        name: document.getElementById("tagname").value,
+        latitude: document.getElementById("taglati").value,
+        longitude: document.getElementById("taglongi").value,
+        hashtag: document.getElementById("taghash").value
+      };
+
+      ajax.open("POST","/geotags",true);
+      ajax.setRequestHeader('Content-Type',"application/json");
+
+      var tagformular = JSON.stringify(gtag);
+      ajax.send(tagformular);
+      }
+
+      function filterFormular() {
+        ajax.onreadystatechange = function () {
+          if (this.readyState == 4 && this.status == 200) {
+            var obj = JSON.parse(ajax.responseText);
+            console.log(obj);
+            document.getElementById("results").innerHTML="";
+            for (var key in obj) {
+              var li = document.createElement("li");
+              li.innerHTML = obj[key].name + " (" + obj[key].latitude + ", " + obj[key].longitude + ") " + obj[key].hashtag + "</li>";
+              document.getElementById("results").appendChild(li);
+            };
+            document.getElementById("discoverylati").value = document.getElementById("discoverylati").value;
+            document.getElementById("discoverylongi").value = document.getElementById("discoverylongi").value;
+            document.getElementById("result-img").dataset.tags = JSON.stringify(obj);
+          }
+        }
+      var url = "/geotags?searchterm=" + document.getElementById("discterm").value + "&latitude=" + document.getElementById("discoverylati").value + "&longitude=" + document.getElementById("discoverylongi").value;
+      ajax.open("GET",url,true);
+      ajax.setRequestHeader('Content-Type',"application/json");
+      ajax.send();
+      }
+
+      function eventHandler1(event) {
+        taggingFormular();
+      }
+      function eventHandler2(Event) {
+        filterFormular();
+      }
+      document.getElementById("tagsubmit").addEventListener("click", eventHandler1, true);
+      document.getElementById("discoveryapply").addEventListener("click",eventHandler2,true);
+    },
+
     updateLocation: function() {
 
       function errorMessage(msg) {
@@ -160,5 +223,6 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
  * des Skripts.
  */
 $(function() {
+  gtaLocator.eventListener();
   gtaLocator.updateLocation();
 });
