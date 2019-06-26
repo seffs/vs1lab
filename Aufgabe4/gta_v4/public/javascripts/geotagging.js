@@ -157,7 +157,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
   }; // ... Ende öffentlicher Teil
 })(GEOLOCATIONAPI);
 
-var ajaxEvents = (function(){
+var ajaxEvents = (function() {
 
   var gtag = function(name, lati, longi, hashtag) {
     this.name = name;
@@ -168,17 +168,17 @@ var ajaxEvents = (function(){
 
   return {
 
-    submitTag: function(){
+    submitTag: function() {
       var ajax = new XMLHttpRequest();
 
 
       ajax.onreadystatechange = function() {
-        if (ajax.readyState == 4){
+        if (ajax.readyState == 4) {
 
           var tags = JSON.parse(ajax.responseText);
           document.getElementById("results").innerHTML = "";
-          if (tags !== []){
-            tags.forEach(function(gtag){
+          if (tags !== []) {
+            tags.forEach(function(gtag) {
               var newElement = document.createElement("li");
               var content = document.createTextNode(gtag.name + " (" + gtag.latitude + ", " + gtag.longitude + ") " + gtag.hashtag);
               newElement.appendChild(content);
@@ -194,24 +194,22 @@ var ajaxEvents = (function(){
       };
 
       var newGtag = new gtag(document.getElementById("tagname").value, document.getElementById("taglati").value, document.getElementById("taglongi").value, document.getElementById("taghash").value);
-      console.log(newGtag);
       var gtagJson = JSON.stringify(newGtag);
-      console.log(gtagJson);
       ajax.open("POST", "/geotags", true);
       ajax.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
       ajax.send(gtagJson);
     },
 
-    discoverTags: function(){
+    discoverTags: function() {
       var ajax = new XMLHttpRequest();
 
       ajax.onreadystatechange = function() {
-        if (ajax.readyState == 4){
+        if (ajax.readyState == 4) {
 
           var tags = JSON.parse(ajax.responseText);
           document.getElementById("results").innerHTML = "";
-          if (tags !== []){
-            tags.forEach(function(gtag){
+          if (tags !== []) {
+            tags.forEach(function(gtag) {
               var newElement = document.createElement("li");
               var content = document.createTextNode(gtag.name + " (" + gtag.latitude + ", " + gtag.longitude + ") " + gtag.hashtag);
               newElement.appendChild(content);
@@ -235,9 +233,13 @@ var ajaxEvents = (function(){
   }
 })();
 
-document.getElementById("tagsubmit").addEventListener("click", function(){ajaxEvents.submitTag();});
-document.getElementById("discoveryapply").addEventListener("click", function(){ajaxEvents.discoverTags();});
-document.getElementById("discoveryremove").addEventListener("click", function(){
+document.getElementById("tagsubmit").addEventListener("click", function() {
+  ajaxEvents.submitTag();
+});
+document.getElementById("discoveryapply").addEventListener("click", function() {
+  ajaxEvents.discoverTags();
+});
+document.getElementById("discoveryremove").addEventListener("click", function() {
   document.getElementById("discterm").value = "";
   ajaxEvents.discoverTags();
 });

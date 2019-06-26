@@ -75,9 +75,8 @@ var geoTagManagement = (function() {
             ret.push(gtag);
           }
         }
-      }
-    );
-    return ret;
+      });
+      return ret;
     },
 
     searchTerm: function(term) {
@@ -101,13 +100,21 @@ var geoTagManagement = (function() {
       geoTagSpace = geoTagSpace.splice(i, 1);
     },
 
+    delById: function(id) {
+
+      geoTagSpace = geoTagSpace.filter(function(ele) {
+        return ele.name != id;
+      });
+    },
+
     getById: function(id) {
-      geoTagSpace.forEach(function(gtag){
-        if (gtag.name === id){
-          return gtag;
+      var ret = [];
+      geoTagSpace.forEach(function(gtag) {
+        if (gtag.name === id) {
+          ret.push(gtag);
         }
       });
-      return "Not defined!";
+      return ret;
     }
   };
 })();
@@ -188,60 +195,67 @@ app.post('/discovery', function(req, res) {
 });
 
 // REST API
-  app.get('/geotags', function(req, res){
-    var lati = req.query.latitude;
-    var longi = req.query.longitude;
-    var term = req.query.searchterm;
+app.get('/geotags', function(req, res) {
+  var lati = req.query.latitude;
+  var longi = req.query.longitude;
+  var term = req.query.searchterm;
 
-    var showGtags = geoTagManagement.getGeoTags();
-    if (term !== ""){
-      showGtags = geoTagManagement.searchTerm(term);
-   }
-    showGtags = geoTagManagement.searchRad(lati, longi, 10.0, showGtags);
-    res.json(showGtags);
-  });
+  var showGtags = geoTagManagement.getGeoTags();
+  if (term !== "") {
+    showGtags = geoTagManagement.searchTerm(term);
+  }
+  showGtags = geoTagManagement.searchRad(lati, longi, 10.0, showGtags);
+  res.json(showGtags);
+});
 
-  app.post('/geotags', function(req, res){
-    var newGtag = new gtag(req.body.name, req.body.latitude, req.body.longitude, req.body.hashtag);
-    geoTagManagement.addGeoTag(newGtag);
-    var showGtags = geoTagManagement.getGeoTags();
-    showGtags = geoTagManagement.searchRad(req.body.latitude, req.body.longitude, 10.0, showGtags);
-    res.location('/geotags/' + req.body.name);
-    res.status(201);
-    res.json(showGtags);
-  });
+app.post('/geotags', function(req, res) {
+  var newGtag = new gtag(req.body.name, req.body.latitude, req.body.longitude, req.body.hashtag);
+  geoTagManagement.addGeoTag(newGtag);
+  var showGtags = geoTagManagement.getGeoTags();
+  showGtags = geoTagManagement.searchRad(req.body.latitude, req.body.longitude, 10.0, showGtags);
+  res.location('/geotags/' + req.body.name);
+  res.status(201);
+  res.json(showGtags);
+});
 
-  app.get('/geotags/:tagid', function(req, res){
-    var tagId = request.params.tagid;
-    var tag = geoTagManagement.getById(tagId);
-    if (tag === "Not defined!"){
-      res.sendStatus(404);
-    } else {
-      res.json(tag);
-    }
-
-  });
-
-  app.put('/geotags/:tagid', function(req, res){
-    var tagId = request.params.tagid;
-    var tag = geoTagManagement.getById(tagId);
-    tag.name = req.body.name;
-    tag.latitude = req.body.latitude;
-    tag.longitude = req.body.longitude;
-    tag.hashtag = req.body.hashtag;
+app.get('/geotags/:tagid', function(req, res) {
+  var tagId = req.params.tagid;
+  var tagAr = geoTagManagement.getById(tagId);
+  var tag = tagAr[0];
+  if (tag === undefined) {
+    res.sendStatus(404);
+  } else {
     res.json(tag);
-  });
+  }
 
-  app.delete('/geotags/:tagid', function(req, res){
-    var tagId = request.params.tagid;
-    var tag = geoTagManagement.getById(tagId);
-    if (tag === "Not defined!"){
-      res.sendStatus(404);
-    } else {
-      geoTagManagement.delGeoTag(tag);
-      res.sendStatus(204);
-    }
-  });
+});
+
+app.put('/geotags/:tagid', function(req, res) {
+  var tagId = req.params.tagid;
+  var tagAr = geoTagManagement.getById(tagId);
+  var tag = tagAr[0];
+  console.log(tag);
+  console.log(req.body);
+  console.log(req.body.name);
+  tag.name = req.body.name;
+  tag.latitude = req.body.latitude;
+  tag.longitude = req.body.longitude;
+  tag.hashtag = req.body.hashtag;
+  console.log(geoTagManagement.getGeoTags());
+  res.json(tag);
+});
+
+app.delete('/geotags/:tagid', function(req, res) {
+  var tagId = req.params.tagid;
+  var tagAr = geoTagManagement.getById(tagId);
+  var tag = tagAr[0];
+  if (tag === undefined) {
+    res.sendStatus(404);
+  } else {
+    geoTagManagement.delById(tagId);
+    res.sendStatus(204);
+  }
+});
 
 /**
  * Setze Port und speichere in Express.
