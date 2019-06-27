@@ -218,39 +218,38 @@ showGtags = geoTagManagement.searchRad(query["latitude"], query["longitude"], 10
 res.json(showGtags);
 });
 
-app.get('/geotags/:name', function(req,res) {
-  var found = geoTagManagement.getGeoTags();
-  var foundtag = found.find(tag => tag.name === req.params.name);
-  if (foundtag != undefined) {
-    res.send(foundtag);
+app.get('/geotags/:id', function(req,res) {
+  var tagId = parseFloat(req.params.id);
+  var found = geoTagManagement.getGeoTags()[tagId - 1];
+  if (found != undefined) {
+    res.send(found);
   }
   else {
     res.sendStatus(404);
   }
 });
 
-app.put('/geotags/:name', function(req,res) {
+app.put('/geotags/:id', function(req,res) {
   /*Sollte mit JSON Objekt arbeiten, query strings nur für Darstellung*/
-  var query = url.parse(req.url, true).query;
-  var found = geoTagManagement.getGeoTags();
-  var foundtag = found.find(tag => tag.name === req.params.name);
-  if (foundtag != undefined) {
-    foundtag.name = query["name"] !== undefined ? query["name"] : foundtag.name;
-    foundtag.latitude = query["latitude"] !== undefined ? query["latitude"] : foundtag.latitude;
-    foundtag.longitude = query["longitude"] !== undefined ? query["longitude"] : foundtag.longitude;
-    foundtag.hashtag = query["hashtag"] !== undefined ? query["hashtag"] : foundtag.hashtag;
-    res.json(foundtag);
+  var tagId = parseFloat(req.params.id);
+  var found = geoTagManagement.getGeoTags()[tagId - 1];
+  var liste =  geoTagManagement.getGeoTags();
+  if (found != undefined) {
+    var geo = new gtag(req.body.name, req.body.latitude,req.body.longitude,req.body.hashtag);
+    liste[tagId - 1] = geo;
+    res.json(geo);
+  //  res.json(req.body);
   }
   else {
     res.sendStatus(404);
   }
 });
 
-app.delete('/geotags/:name', function(req, res) {
-  var found = geoTagManagement.getGeoTags();
-  var foundtag = found.find(tag => tag.name === req.params.name);
-  if (foundtag != undefined) {
-    geoTagManagement.delById(req.params.name);
+app.delete('/geotags/:id', function(req, res) {
+  var tagId = parseFloat(req.params.id);
+  var found = geoTagManagement.getGeoTags()[tagId - 1];
+  if (found != undefined) {
+    geoTagManagement.delById(found.name);
     res.send();
   }
   else {

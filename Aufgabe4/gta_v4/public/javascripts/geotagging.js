@@ -125,6 +125,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
       function taggingFormular() {
         ajax.onreadystatechange = function () {
           if (this.readyState == 4 && this.status == 201) {
+            console.log(ajax.responseText);
             var newgtag = JSON.parse(ajax.responseText);
             updateList(newgtag);
           }
@@ -140,6 +141,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
       ajax.open("POST","/geotags",true);
       ajax.setRequestHeader('Content-Type',"application/json");
       var tagform = JSON.stringify(gtag);
+      console.log(tagform);
       ajax.send(tagform);
       }
 
