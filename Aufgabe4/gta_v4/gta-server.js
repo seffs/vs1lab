@@ -102,6 +102,23 @@ var geoTagManagement = (function() {
     delGeoTag: function(gtag) {
       var i = geoTagSpace.indexOf(gtag);
       geoTagSpace = geoTagSpace.splice(i, 1);
+    },
+
+    delById: function(name) {
+
+      geoTagSpace = geoTagSpace.filter(function(ele) {
+        return ele.name != name;
+      });
+    },
+
+    getById: function(name) {
+      var ret = [];
+      geoTagSpace.forEach(function(gtag) {
+        if (gtag.name === name) {
+          ret.push(gtag);
+        }
+      });
+      return ret;
     }
 
   };
@@ -182,43 +199,63 @@ app.post('/discovery', function(req, res) {
 /**
 *AJAX-Aufrufe
 */
-app.get('/geotags', function(req,res) {
+
+var queryString = function(req, res, next) {
+  return next(req.query.searchterm ? 'route' : null);
+};
+
+app.get('/geotags', queryString, function(req,res) {
   res.json(geoTagManagement.getGeoTags());
+});
+
+app.get('/geotags', function(req,res) {
+var showGtags = geoTagManagement.getGeoTags();
+var query = url.parse(req.url, true).query;
+if (query["searchterm"] !== "") {
+  showGtags = geoTagManagement.searchTerm(query["searchterm"]);
+}
+showGtags = geoTagManagement.searchRad(query["latitude"], query["longitude"], 10.0, showGtags);
+res.json(showGtags);
 });
 
 app.get('/geotags/:name', function(req,res) {
   var found = geoTagManagement.getGeoTags();
   var foundtag = found.find(tag => tag.name === req.params.name);
-  res.json(foundtag);
+  if (foundtag != undefined) {
+    res.send(foundtag);
+  }
+  else {
+    res.sendStatus(404);
+  }
 });
 
 app.put('/geotags/:name', function(req,res) {
+  /*Sollte mit JSON Objekt arbeiten, query strings nur für Darstellung*/
   var query = url.parse(req.url, true).query;
   var found = geoTagManagement.getGeoTags();
   var foundtag = found.find(tag => tag.name === req.params.name);
-  foundtag.name = query["name"] !== undefined ? query["name"] : foundtag.name;
-  foundtag.latitude = query["latitude"] !== undefined ? query["latitude"] : foundtag.latitude;
-  foundtag.longitude = query["longitude"] !== undefined ? query["longitude"] : foundtag.longitude;
-  foundtag.hashtag = query["hashtag"] !== undefined ? query["hashtag"] : foundtag.hashtag;
-  res.json(foundtag);
+  if (foundtag != undefined) {
+    foundtag.name = query["name"] !== undefined ? query["name"] : foundtag.name;
+    foundtag.latitude = query["latitude"] !== undefined ? query["latitude"] : foundtag.latitude;
+    foundtag.longitude = query["longitude"] !== undefined ? query["longitude"] : foundtag.longitude;
+    foundtag.hashtag = query["hashtag"] !== undefined ? query["hashtag"] : foundtag.hashtag;
+    res.json(foundtag);
+  }
+  else {
+    res.sendStatus(404);
+  }
 });
 
 app.delete('/geotags/:name', function(req, res) {
   var found = geoTagManagement.getGeoTags();
   var foundtag = found.find(tag => tag.name === req.params.name);
-  var found = new gtag(foundtag.name,foundtag.latitude,foundtag.longitude,foundtag.hashtag);
-  geoTagManagement.delGeoTag(found);
-  delete found;
-  res.send();
-});
-
-app.get('/geotags*', function(req,res) {
-  var query = url.parse(req.url, true).query;
-  if (query["searchterm"] != "") {
-    showGtags = geoTagManagement.searchTerm(query["searchterm"]);
+  if (foundtag != undefined) {
+    geoTagManagement.delById(req.params.name);
+    res.send();
   }
-  showGtags = geoTagManagement.searchRad(query["latitude"], query["longitude"], 10.0, showGtags);
-  res.json(showGtags);
+  else {
+    res.sendStatus(404);
+  }
 });
 
 
