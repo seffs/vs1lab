@@ -234,15 +234,15 @@ app.put('/geotags/:tagid', function(req, res) {
   var tagId = req.params.tagid;
   var tagAr = geoTagManagement.getById(tagId);
   var tag = tagAr[0];
-  console.log(tag);
-  console.log(req.body);
-  console.log(req.body.name);
-  tag.name = req.body.name;
-  tag.latitude = req.body.latitude;
-  tag.longitude = req.body.longitude;
-  tag.hashtag = req.body.hashtag;
-  console.log(geoTagManagement.getGeoTags());
-  res.json(tag);
+  if (tag === undefined) {
+    res.sendStatus(404);
+  } else {
+    tag.name = req.body.name;
+    tag.latitude = req.body.latitude;
+    tag.longitude = req.body.longitude;
+    tag.hashtag = req.body.hashtag;
+    res.json(tag);
+  }
 });
 
 app.delete('/geotags/:tagid', function(req, res) {
