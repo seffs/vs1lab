@@ -95,9 +95,9 @@ var geoTagManagement = (function() {
       geoTagSpace.push(gtag);
     },
 
-    delGeoTag: function(gtag) {
-      var i = geoTagSpace.indexOf(gtag);
-      geoTagSpace = geoTagSpace.splice(i, 1);
+    delGeoTag: function(index) {
+      console.log(index);
+      geoTagSpace.splice(index, 1);
     },
 
     delById: function(id) {
@@ -219,9 +219,8 @@ app.post('/geotags', function(req, res) {
 });
 
 app.get('/geotags/:tagid', function(req, res) {
-  var tagId = req.params.tagid;
-  var tagAr = geoTagManagement.getById(tagId);
-  var tag = tagAr[0];
+  var tagId = parseFloat(req.params.tagid);
+  var tag = geoTagManagement.getGeoTags()[tagId - 1];
   if (tag === undefined) {
     res.sendStatus(404);
   } else {
@@ -231,9 +230,8 @@ app.get('/geotags/:tagid', function(req, res) {
 });
 
 app.put('/geotags/:tagid', function(req, res) {
-  var tagId = req.params.tagid;
-  var tagAr = geoTagManagement.getById(tagId);
-  var tag = tagAr[0];
+  var tagId = parseFloat(req.params.tagid);
+  var tag = geoTagManagement.getGeoTags()[tagId - 1];
   if (tag === undefined) {
     res.sendStatus(404);
   } else {
@@ -246,13 +244,12 @@ app.put('/geotags/:tagid', function(req, res) {
 });
 
 app.delete('/geotags/:tagid', function(req, res) {
-  var tagId = req.params.tagid;
-  var tagAr = geoTagManagement.getById(tagId);
-  var tag = tagAr[0];
+  var tagId = parseFloat(req.params.tagid);
+  var tag = geoTagManagement.getGeoTags()[tagId - 1];
   if (tag === undefined) {
     res.sendStatus(404);
   } else {
-    geoTagManagement.delById(tagId);
+    geoTagManagement.delGeoTag((tagId - 1));
     res.sendStatus(204);
   }
 });
